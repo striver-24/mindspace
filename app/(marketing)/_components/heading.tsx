@@ -3,7 +3,6 @@
 import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import { useConvexAuth } from "convex/react";
-import { ArrowRight } from "lucide-react";
 import { SignInButton } from "@clerk/clerk-react";
 import Link from "next/link";
 
@@ -28,7 +27,6 @@ export const Heading = () => {
                 <Button>
                     <Link href="/documents">
                         Enter MindSpace
-                        <ArrowRight className="h-4 w-4 ml-2" />
                     </Link>
                 </Button>
             )}
@@ -36,7 +34,6 @@ export const Heading = () => {
                 <SignInButton mode="modal">
                     <Button>
                         Get MindSpace Free!
-                        <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                 </SignInButton>
             )}
