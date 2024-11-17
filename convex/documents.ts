@@ -3,6 +3,35 @@ import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { ctx } from "./context"; // Make sure to replace './context' with the correct path
 
+export const archive = mutation({
+    args: { id: v.id("documents") },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity) {
+            throw new Error("Not Authenticated");
+        }
+
+        const userId = identity.subject;
+
+        const existingDocument = await ctx.db.get(args.id);
+
+        if(!existingDocument) {
+            throw new Error("Not Found");
+        }
+
+        if(existingDocument.userId !== userId) {
+            throw new Error("Not Authorized");
+        }
+
+        const document = await ctx.db.patch(args.id, {
+            isArchived: true,
+        });
+
+        return document;
+    }
+})
+
 export const getSidebar = query({
     args: {
         parentDocument: v.optional(v.id("documents"))
