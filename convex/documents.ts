@@ -1,8 +1,7 @@
 import { v } from "convex/values";
-
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
-import { ctx } from 
+import { ctx } from "./context"; // Make sure to replace './context' with the correct path
 
 export const get = query({
     handler: async (ctx) => {
