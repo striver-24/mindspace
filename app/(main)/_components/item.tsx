@@ -17,6 +17,7 @@ import {
     DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 
+
 interface ItemProps {
     id?: Id<"documents">;
     documentIcon?: string;
@@ -51,7 +52,7 @@ export const Item = ({
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
         event.stopPropagation();
-        if (!id) return!
+        if (!id) return;
         const promise = archive({ id });
 
         toast.promise(promise, {
