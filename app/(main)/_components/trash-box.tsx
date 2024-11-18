@@ -88,23 +88,25 @@ export const TrashBox = () => {
                         >
                             <span>{document.title}</span>
                             <div className="flex gap-x-2">
-                                <button
-                                    onClick={(event) => onRestore(event, document._id)}
+                                <div
+                                    role="button"
+                                    onClick={(e) => onRestore(e, document._id)}
                                     className="text-blue-500"
                                 >
                                     Restore
-                                </button>
-                                <button
-                                    onClick={(event) => onRemove(event, document._id)}
+                                </div>
+                                <div
+                                    role="button"
+                                    onClick={(e) => onRemove(e, document._id)}
                                     className="text-red-500"
                                 >
                                     Delete
-                                </button>
+                                </div>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <div className="text-gray-500">No documents found.</div>
+                    <div className="text-gray-500 text-center text-muted-foreground">No documents found.</div>
                 )}
             </div>
         </div>
