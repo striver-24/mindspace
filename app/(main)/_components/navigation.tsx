@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { UserItem } from "./user-item";
 import { Item } from "./item";
 import { DocumentList } from "./document-list";
+import { TrashBox } from "./trash-box";
 
 export const Navigation = () => {
     const pathname = usePathname();

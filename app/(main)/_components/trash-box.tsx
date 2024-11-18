@@ -2,7 +2,6 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation } from "convex/react";
-
 import { api } from "@/convex/_generated/api";
 import { useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
@@ -17,7 +16,7 @@ export const TrashBox = () => {
     const restore = useMutation(api.documents.restore);
     const remove = useMutation(api.documents.remove);
 
-    const[search, setSearch] = useState("");
+    const [search, setSearch] = useState("");
 
     const filteredDocuments = documents?.filter((document) => {
         return document.title.toLowerCase().includes(search.toLowerCase());
@@ -37,11 +36,12 @@ export const TrashBox = () => {
         toast.promise(promise, {
             loading: "Restoring note...",
             success: "Note Restored",
-            error:" Failed to Restore Node"
+            error: "Failed to Restore Note"
         });
     };
 
     const onRemove = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         documentId: Id<"documents">,
     ) => {
         event.stopPropagation();
@@ -50,10 +50,10 @@ export const TrashBox = () => {
         toast.promise(promise, {
             loading: "Deleting note...",
             success: "Note Deleted",
-            error:" Failed to delete Node"
+            error: "Failed to delete Note"
         });
 
-        if ( params.documentId === documentId ) {
+        if (params.documentId === documentId) {
             router.push("/documents");
         }
     };
@@ -66,12 +66,47 @@ export const TrashBox = () => {
         );
     }
 
-
     return (
         <div className="text-sm">
             <div className="flex items-center gap-x-1 p-2">
                 <Search />
+                <input
+                    type="text"
+                    placeholder="Search documents..."
+                    value={search}
+                    onChange={(e ) => setSearch(e.target.value)}
+                    className="border rounded p-1"
+                />
+            </div>
+            <div className="mt-4">
+                {filteredDocuments?.length > 0 ? (
+                    filteredDocuments.map((document) => (
+                        <div
+                            key={document._id}
+                            className="flex justify-between items-center p-2 border-b"
+                            onClick={() => onClick(document._id)}
+                        >
+                            <span>{document.title}</span>
+                            <div className="flex gap-x-2">
+                                <button
+                                    onClick={(event) => onRestore(event, document._id)}
+                                    className="text-blue-500"
+                                >
+                                    Restore
+                                </button>
+                                <button
+                                    onClick={(event) => onRemove(event, document._id)}
+                                    className="text-red-500"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-gray-500">No documents found.</div>
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
