@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -8,25 +8,35 @@ import { Toolbar } from "@/components/Toolbar";
 import { Cover } from "@/components/Cover";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Adjust the interface to match what is expected
-type Params = Promise<{ documentId: string }>;
+type Params = { documentId: string };
 
-export default async function DocumentIdPage({ params }: { params: Params }) {
-  const { documentId } = await params; // Await params to get the documentId
+interface DocumentIdPageProps {
+  params: Params;
+}
 
+export default function DocumentIdPage({ params }: { params: Params }) {
+  const [documentId, setDocumentId] = useState<Id<"documents"> | null>(null); // Use the correct type
   const Editor = useMemo(() => dynamic(() => import("@/components/Editor"), { ssr: false }), []);
 
+  useEffect(() => {
+    // Set the documentId from params when the component mounts
+    setDocumentId(params.documentId as Id<"documents">); // Cast to Id<"documents">
+  }, [params]);
+
+  // Check if documentId is null before calling useQuery
   const document = useQuery(api.documents.getById, {
-    documentId: documentId // Use the awaited documentId
+    documentId: documentId as Id<"documents"> // Cast to Id<"documents">, ensure it's not null
   });
 
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    update({
-      documentId: documentId, // Correctly using documentId
-      content
-    });
+    if (documentId) {
+      update({
+        id: documentId, // Correctly using id instead of documentId
+        content
+      });
+    }
   };
 
   if (document === undefined) {
