@@ -1,4 +1,4 @@
-'use client'	
+'use client';
 
 import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteViewRaw, useBlockNote } from '@blocknote/react';
@@ -26,15 +26,18 @@ function Editor({ onChange, initialContent, editable }: EditorProps) {
   const editor: BlockNoteEditor = useBlockNote({
     editable,
     initialContent: initialContent ? JSON.parse(initialContent) as PartialBlock[] : undefined,
-    onEditorContentChange: (editor) => {
-      onChange(JSON.stringify(editor.topLevelBlocks, null, 2)); // Call onChange with the updated content
-    },
     uploadFile: handleUpload // Set the upload handler
   });
 
   return (
     <div>
-      <BlockNoteViewRaw editor={editor} theme={resolvedTheme === 'dark' ? 'dark' : 'light'} />
+      <BlockNoteViewRaw
+        editor={editor}
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        onChange={() => {
+          onChange(JSON.stringify(editor.topLevelBlocks, null, 2)); // Call onChange with the updated content
+        }}
+      />
     </div>
   );
 }
