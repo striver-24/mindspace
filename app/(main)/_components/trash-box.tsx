@@ -8,6 +8,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { toast } from "sonner";
 import { Spinner } from "@/components/spinner";
 import { Search } from "lucide-react";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
 
 export const TrashBox = () => {
     const router = useRouter();
@@ -95,13 +96,15 @@ export const TrashBox = () => {
                                 >
                                     Restore
                                 </div>
-                                <div
-                                    role="button"
-                                    onClick={(e) => onRemove(e, document._id)}
-                                    className="text-red-500"
-                                >
-                                    Delete
-                                </div>
+                                <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                                    <div
+                                        role="button"
+                                        onClick={(e) => onRemove(e, document._id)}
+                                        className="text-red-500"
+                                    >
+                                        Delete
+                                    </div>
+                                </ConfirmModal>
                             </div>
                         </div>
                     ))
