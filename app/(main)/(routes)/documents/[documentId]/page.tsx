@@ -1,35 +1,33 @@
-import { useMutation, useQuery } from "convex/react"
-import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useMutation, useQuery } from "convex/react";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
-import { api } from "@/convex/_generated/api"
-import { Id } from "@/convex/_generated/dataModel"
-import { Toolbar } from "@/components/Toolbar"
-import { Cover } from "@/components/Cover"
-import { Skeleton } from "@/components/ui/skeleton"
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { Toolbar } from "@/components/Toolbar";
+import { Cover } from "@/components/Cover";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Adjust the interface to match what is expected
-interface DocumentIdPageProps {
-  params: {
-    documentId: string; // Change to string if Id<'documents'> is not compatible
-  }
-}
+type Params = Promise<{ documentId: string }>;
 
-export default function DocumentIdPage ({ params }: DocumentIdPageProps) {
-  const Editor = useMemo(() => dynamic(() => import("@/components/Editor"), { ssr: false }), [])
+export default async function DocumentIdPage({ params }: { params: Params }) {
+  const { documentId } = await params; // Await params to get the documentId
+
+  const Editor = useMemo(() => dynamic(() => import("@/components/Editor"), { ssr: false }), []);
 
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId // Correctly using documentId
-  })
+    documentId: documentId // Use the awaited documentId
+  });
 
-  const update = useMutation(api.documents.update)
+  const update = useMutation(api.documents.update);
 
-const onChange = (content: string) => {
-  update({
-    documentId: params.documentId, // Correctly using documentId
-    content
-  })
-}
+  const onChange = (content: string) => {
+    update({
+      documentId: documentId, // Correctly using documentId
+      content
+    });
+  };
 
   if (document === undefined) {
     return (
@@ -44,11 +42,11 @@ const onChange = (content: string) => {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (document === null) {
-    return <div>Not Found</div>
+    return <div>Not Found</div>;
   }
 
   return (
@@ -59,5 +57,5 @@ const onChange = (content: string) => {
         <Editor onChange={onChange} initialContent={document.content} />
       </div>
     </div>
-  )
+  );
 }
