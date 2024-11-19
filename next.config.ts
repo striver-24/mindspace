@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+
+reactStrictMode: false,
+
+
   images: {
     domains: [
       "files.edgestone.dev"

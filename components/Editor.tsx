@@ -1,10 +1,8 @@
-'use client';
-
 import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteViewRaw, useBlockNote } from '@blocknote/react';
 import '@blocknote/core/style.css';
 import { useTheme } from "next-themes";
-import { useEdgeStore } from "@/lib/edgestore";
+import { useEdgeStore } from "@/lib/edgestore"
 
 interface EditorProps {
   onChange: (value: string) => void; // Callback for content change
@@ -22,6 +20,7 @@ function Editor({ onChange, initialContent, editable }: EditorProps) {
     return response.url; // Return the URL of the uploaded file
   };
 
+  // Initialize the BlockNote editor with default components
   // Initialize the BlockNote editor
   const editor: BlockNoteEditor = useBlockNote({
     editable,
